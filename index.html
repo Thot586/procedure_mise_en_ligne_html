@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partager un lien avec GitHub Pages : guide débutant</title>
+<meta name="description" content="Guide pas à pas pour débutant : créer un compte GitHub, publier une page web gratuite avec GitHub Pages, la modifier, la supprimer et la faire apparaître dans les moteurs de recherche.">
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --text: #1c2330;
+    --muted: #5b6577;
+    --border: #dde2ea;
+    --accent: #1f6feb;
+    --accent-soft: #e6f0ff;
+    --ok: #1a7f37;
+    --ok-soft: #e3f6e8;
+    --warn: #9a6700;
+    --warn-soft: #fff4d6;
+    --danger: #b42318;
+    --danger-soft: #fdeceb;
+    --code-bg: #eef1f6;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141b;
+      --surface: #171e28;
+      --text: #e6ebf2;
+      --muted: #9aa6b8;
+      --border: #2a3342;
+      --accent: #5aa2ff;
+      --accent-soft: #14253d;
+      --ok: #4ac26b;
+      --ok-soft: #12291a;
+      --warn: #e3b341;
+      --warn-soft: #2e2510;
+      --danger: #ff7b72;
+      --danger-soft: #34181a;
+      --code-bg: #0d1219;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 16px 64px; }
+  header { padding: 40px 0 8px; }
+  .badge {
+    display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
+    padding: 3px 10px; border-radius: 999px;
+  }
+  h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.2; margin: 12px 0 8px; }
+  .lead { color: var(--muted); font-size: 1.05rem; margin: 0; }
+
+  /* Test en direct */
+  .live {
+    margin: 24px 0; padding: 14px 16px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--surface); font-size: .95rem;
+  }
+  .live strong { display: block; margin-bottom: 2px; }
+  .live code { word-break: break-all; }
+  .live.ok { border-color: var(--ok); background: var(--ok-soft); }
+  .live.local { border-color: var(--warn); background: var(--warn-soft); }
+
+  /* Résumé */
+  .summary {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 18px 14px; margin-bottom: 28px;
+  }
+  .summary h2 { margin: 0 0 4px; font-size: 1.1rem; }
+  .progress-line { display: flex; align-items: center; gap: 10px; margin: 8px 0 14px; color: var(--muted); font-size: .9rem; }
+  .bar { flex: 1; height: 8px; background: var(--code-bg); border-radius: 99px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .steps-nav { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .steps-nav a {
+    display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px;
+    color: var(--text); text-decoration: none;
+  }
+  .steps-nav a:hover { background: var(--accent-soft); }
+  .steps-nav .n {
+    flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--accent);
+    color: #fff; display: grid; place-items: center; font-size: .85rem; font-weight: 700;
+  }
+  .steps-nav li.done .n { background: var(--ok); }
+  .steps-nav li.done a span.t { text-decoration: line-through; color: var(--muted); }
+
+  /* Étapes */
+  section.step {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 18px; scroll-margin-top: 16px;
+  }
+  section.step h2 { margin: 0 0 4px; font-size: 1.25rem; display: flex; gap: 10px; align-items: center; }
+  section.step h2 .n {
+    flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--accent);
+    color: #fff; display: grid; place-items: center; font-size: .95rem;
+  }
+  .goal { color: var(--muted); margin: 0 0 12px; }
+  .essential { margin: 0 0 12px; padding-left: 1.2rem; }
+  .essential li { margin: 4px 0; }
+
+  details {
+    border: 1px solid var(--border); border-radius: 10px; margin: 8px 0; background: var(--bg);
+  }
+  details > summary {
+    cursor: pointer; padding: 10px 14px; font-weight: 600; list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::after { content: "+"; font-size: 1.2rem; color: var(--accent); }
+  details[open] > summary::after { content: "\2212"; }
+  details > .body { padding: 0 14px 12px; }
+  details ol, details ul { padding-left: 1.2rem; margin: 6px 0; }
+  details li { margin: 5px 0; }
+
+  .note, .warn, .danger {
+    border-left: 4px solid; border-radius: 6px; padding: 8px 12px; margin: 10px 0; font-size: .95rem;
+  }
+  .note { border-color: var(--accent); background: var(--accent-soft); }
+  .warn { border-color: var(--warn); background: var(--warn-soft); }
+  .danger { border-color: var(--danger); background: var(--danger-soft); }
+
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .88em; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; }
+  pre { background: var(--code-bg); padding: 12px; border-radius: 8px; overflow-x: auto; margin: 8px 0; }
+  pre code { background: none; padding: 0; }
+  kbd {
+    font: inherit; font-size: .85em; border: 1px solid var(--border); border-bottom-width: 2px;
+    border-radius: 5px; padding: 0 6px; background: var(--surface);
+  }
+  abbr { text-decoration: underline dotted; cursor: help; }
+
+  .done-check {
+    display: flex; gap: 8px; align-items: center; margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed var(--border); font-size: .92rem; color: var(--muted); cursor: pointer;
+  }
+  .done-check input { width: 18px; height: 18px; accent-color: var(--ok); }
+
+  a { color: var(--accent); }
+  h3 { font-size: 1rem; margin: 14px 0 4px; }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; margin-top: 32px; }
+  table { border-collapse: collapse; width: 100%; font-size: .93rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  @media (max-width: 480px) { section.step { padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge">Page de test</span>
+  <h1>Partager un lien en ligne avec GitHub, en partant de zéro</h1>
+  <p class="lead">Un guide pour débutant : créer un compte, publier une page web gratuite, la modifier, la supprimer, et la faire trouver par les moteurs de recherche.</p>
+</header>
+
+<div class="live" id="live" role="status">
+  <strong>Test de cette page</strong>
+  <span id="live-text">Vérification en cours…</span>
+</div>
+
+<nav class="summary" aria-label="Sommaire">
+  <h2>L'essentiel en 7 étapes</h2>
+  <div class="progress-line">
+    <span id="progress-label">0 / 7</span>
+    <div class="bar"><span id="progress-bar"></span></div>
+  </div>
+  <ol class="steps-nav" id="steps-nav">
+    <li data-step="1"><a href="#etape-1"><span class="n">1</span><span class="t">Créer un compte GitHub</span></a></li>
+    <li data-step="2"><a href="#etape-2"><span class="n">2</span><span class="t">Créer le premier dépôt (repository)</span></a></li>
+    <li data-step="3"><a href="#etape-3"><span class="n">3</span><span class="t">Modifier le dépôt</span></a></li>
+    <li data-step="4"><a href="#etape-4"><span class="n">4</span><span class="t">Supprimer un fichier ou le dépôt</span></a></li>
+    <li data-step="5"><a href="#etape-5"><span class="n">5</span><span class="t">Mettre en ligne avec GitHub Pages</span></a></li>
+    <li data-step="6"><a href="#etape-6"><span class="n">6</span><span class="t">Apparaître dans les moteurs de recherche</span></a></li>
+    <li data-step="7"><a href="#etape-7"><span class="n">7</span><span class="t">Infos utiles : limites, sécurité, dépannage, sources</span></a></li>
+  </ol>
+</nav>
+
+<div class="note">
+  <strong>Astuce d'ordre :</strong> l'étape 4 (suppression) est la seule irréversible. Faites-la en dernier, de préférence sur un dépôt d'essai, et gardez votre vrai site pour la fin.
+</div>
+
+<!-- ÉTAPE 1 -->
+<section class="step" id="etape-1" data-step="1">
+  <h2><span class="n">1</span>Créer un compte GitHub</h2>
+  <p class="goal">Objectif : avoir un espace personnel gratuit où héberger vos fichiers.</p>
+  <ul class="essential">
+    <li>Allez sur <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>.</li>
+    <li>Choisissez un e-mail, un mot de passe solide et un nom d'utilisateur sobre (il apparaîtra dans l'adresse de votre site).</li>
+    <li>Confirmez votre e-mail avec le code reçu, puis gardez l'offre gratuite (<em>Free</em>).</li>
+  </ul>
+  <details>
+    <summary>Pas à pas détaillé</summary>
+    <div class="body">
+      <ol>
+        <li>Ouvrez <code>github.com</code> et cliquez sur <strong>Sign up</strong> (créer un compte).</li>
+        <li>Saisissez votre adresse e-mail, un mot de passe long et unique (un gestionnaire de mots de passe aide), puis un nom d'utilisateur.</li>
+        <li>Résolvez la vérification anti-robot, puis entrez le code à 8 chiffres reçu par e-mail.</li>
+        <li>Si GitHub propose un questionnaire ou des offres payantes, ignorez-les : l'offre <strong>Free</strong> suffit.</li>
+        <li>Recommandé : activez la double authentification dans <strong>Settings</strong> puis <strong>Password and authentication</strong>.</li>
+      </ol>
+      <div class="warn"><strong>Choisir son nom d'utilisateur avec soin :</strong> votre site sera en <code>https://NOM.github.io/…</code>. Préférez des minuscules, sans espace, sans information personnelle sensible. Le changer plus tard casse les anciens liens.</div>
+    </div>
+  </details>
+  <details>
+    <summary>Problèmes fréquents</summary>
+    <div class="body">
+      <ul>
+        <li>Code non reçu : vérifiez les courriers indésirables, puis demandez un nouvel envoi.</li>
+        <li>Nom d'utilisateur refusé : il est déjà pris, ajoutez un chiffre ou un mot.</li>
+      </ul>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="1"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 2 -->
+<section class="step" id="etape-2" data-step="2">
+  <h2><span class="n">2</span>Créer le premier dépôt</h2>
+  <p class="goal">Un <strong>dépôt</strong> (<em>repository</em>) est un dossier de projet qui garde l'historique de chaque modification.</p>
+  <ul class="essential">
+    <li>Bouton <strong>+</strong> en haut à droite, puis <strong>New repository</strong>.</li>
+    <li>Nom sans espace (ex. <code>mon-premier-site</code>), visibilité <strong>Public</strong>.</li>
+    <li>Cochez <em>Add a README file</em>, puis <strong>Create repository</strong>.</li>
+    <li>Ajoutez une page : <strong>Add file</strong>, <strong>Create new file</strong>, nommez-la <code>index.html</code>.</li>
+  </ul>
+  <details>
+    <summary>Pas à pas détaillé</summary>
+    <div class="body">
+      <ol>
+        <li>Cliquez sur <strong>+</strong> (en haut à droite) puis <strong>New repository</strong>.</li>
+        <li><strong>Repository name</strong> : lettres, chiffres et tirets, sans espace ni accent.</li>
+        <li><strong>Public</strong> : nécessaire pour utiliser GitHub Pages gratuitement. Tout le monde pourra voir vos fichiers.</li>
+        <li>Cochez <strong>Add a README file</strong>. Laissez les autres options par défaut, puis <strong>Create repository</strong>.</li>
+        <li>Sur la page du dépôt, cliquez sur <strong>Add file</strong>, puis <strong>Create new file</strong>.</li>
+        <li>Nommez le fichier exactement <code>index.html</code> (c'est la page d'accueil). Collez-y votre contenu, par exemple le minimum ci-dessous.</li>
+        <li>Cliquez sur <strong>Commit changes…</strong>, écrivez un court message (ex. « Ajout de la page d'accueil »), gardez <em>Commit directly to the main branch</em>, puis confirmez.</li>
+      </ol>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Ma première page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Bonjour !&lt;/h1&gt;
+  &lt;p&gt;Ceci est ma première page en ligne.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="note"><strong>Vocabulaire :</strong> un <em>commit</em> est un enregistrement daté de vos modifications, avec un message. La <em>branche</em> <code>main</code> est la version principale du projet.</div>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="2"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 3 -->
+<section class="step" id="etape-3" data-step="3">
+  <h2><span class="n">3</span>Modifier le dépôt</h2>
+  <p class="goal">Changer un texte, ajouter une image ou une nouvelle page, directement dans le navigateur.</p>
+  <ul class="essential">
+    <li>Ouvrez le fichier, cliquez sur l'icône crayon (<em>Edit this file</em>).</li>
+    <li>Modifiez, puis <strong>Commit changes…</strong> pour enregistrer.</li>
+    <li>Pour ajouter des fichiers : <strong>Add file</strong>, puis <strong>Upload files</strong> (glisser-déposer).</li>
+  </ul>
+  <details>
+    <summary>Pas à pas détaillé</summary>
+    <div class="body">
+      <ol>
+        <li>Dans la liste des fichiers du dépôt, cliquez sur <code>index.html</code>.</li>
+        <li>Cliquez sur le crayon en haut à droite du fichier.</li>
+        <li>Modifiez le texte dans l'éditeur. L'onglet <strong>Preview</strong> n'affiche pas toujours le rendu complet d'une page web : le vrai test se fait en ligne.</li>
+        <li>Cliquez sur <strong>Commit changes…</strong>, ajoutez un message, confirmez.</li>
+        <li>Si le site est déjà publié (étape 5), la mise à jour apparaît en ligne après 1 à 2 minutes, parfois plus.</li>
+      </ol>
+      <h3>Revenir en arrière</h3>
+      <p>Ouvrez le fichier, cliquez sur <strong>History</strong> : chaque version est conservée et consultable. Rien n'est perdu tant que le dépôt existe.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Pour aller plus loin (facultatif)</summary>
+    <div class="body">
+      <ul>
+        <li><strong>GitHub Desktop</strong> : application graphique pour modifier sur votre ordinateur puis synchroniser.</li>
+        <li>Ligne de commande avec <code>git</code> : utile quand vous avez beaucoup de fichiers, inutile pour débuter.</li>
+      </ul>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="3"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 4 -->
+<section class="step" id="etape-4" data-step="4">
+  <h2><span class="n">4</span>Supprimer un fichier ou le dépôt</h2>
+  <p class="goal">Retirer un fichier précis, ou effacer tout le projet (et donc le site en ligne).</p>
+  <ul class="essential">
+    <li><strong>Un fichier</strong> : ouvrez-le, menu <strong>⋯</strong>, <strong>Delete file</strong>, puis commit.</li>
+    <li><strong>Tout le dépôt</strong> : <strong>Settings</strong>, tout en bas <em>Danger Zone</em>, <strong>Delete this repository</strong>.</li>
+  </ul>
+  <div class="danger"><strong>Attention :</strong> supprimer le dépôt supprime aussi le site en ligne. Le lien partagé affichera une erreur 404.</div>
+  <details>
+    <summary>Pas à pas détaillé</summary>
+    <div class="body">
+      <h3>Supprimer un fichier</h3>
+      <ol>
+        <li>Ouvrez le fichier, cliquez sur le menu <strong>⋯</strong> (plus d'options) puis <strong>Delete file</strong>.</li>
+        <li>Ajoutez un message et confirmez avec <strong>Commit changes</strong>. Le fichier reste visible dans l'historique.</li>
+      </ol>
+      <h3>Supprimer le dépôt</h3>
+      <ol>
+        <li>Dans le dépôt, onglet <strong>Settings</strong>.</li>
+        <li>Faites défiler jusqu'à <strong>Danger Zone</strong>, puis <strong>Delete this repository</strong>.</li>
+        <li>GitHub demande de taper le nom complet du dépôt (<code>utilisateur/nom</code>) pour confirmer, puis votre mot de passe ou un code.</li>
+      </ol>
+      <div class="warn"><strong>Alternative plus douce :</strong> <strong>Archive this repository</strong> (même page <em>Settings</em>) rend le dépôt en lecture seule sans l'effacer. Une restauration après suppression est parfois possible pendant une durée limitée, mais ne comptez pas dessus.</div>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="4"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 5 -->
+<section class="step" id="etape-5" data-step="5">
+  <h2><span class="n">5</span>Mettre en ligne avec GitHub Pages</h2>
+  <p class="goal">GitHub Pages transforme votre dépôt en site web gratuit, avec une adresse à partager.</p>
+  <ul class="essential">
+    <li><strong>Settings</strong>, puis <strong>Pages</strong> dans le menu de gauche.</li>
+    <li>Source : <em>Deploy from a branch</em>, branche <code>main</code>, dossier <code>/ (root)</code>, puis <strong>Save</strong>.</li>
+    <li>Attendez 1 à 10 minutes. L'adresse est <code>https://NOM.github.io/NOM-DU-DEPOT/</code>.</li>
+  </ul>
+  <details>
+    <summary>Pas à pas détaillé</summary>
+    <div class="body">
+      <ol>
+        <li>Vérifiez que le dépôt est <strong>Public</strong> et contient un fichier <code>index.html</code> à la racine.</li>
+        <li>Onglet <strong>Settings</strong>, puis <strong>Pages</strong> (section <em>Code and automation</em>).</li>
+        <li>Sous <em>Build and deployment</em>, <strong>Source</strong> : <em>Deploy from a branch</em>.</li>
+        <li><strong>Branch</strong> : <code>main</code> et dossier <code>/ (root)</code>, puis <strong>Save</strong>.</li>
+        <li>Rechargez la page de réglages après quelques minutes : un bandeau indique l'adresse publiée. Vous pouvez suivre le déploiement dans l'onglet <strong>Actions</strong>.</li>
+        <li>Cochez <strong>Enforce HTTPS</strong> si l'option est proposée (connexion sécurisée).</li>
+      </ol>
+      <h3>Deux formes d'adresse</h3>
+      <table>
+        <tr><th>Nom du dépôt</th><th>Adresse du site</th></tr>
+        <tr><td><code>mon-premier-site</code></td><td><code>https://NOM.github.io/mon-premier-site/</code></td></tr>
+        <tr><td><code>NOM.github.io</code> (nom spécial)</td><td><code>https://NOM.github.io/</code></td></tr>
+      </table>
+    </div>
+  </details>
+  <details>
+    <summary>Ça ne marche pas ? (erreur 404, page blanche)</summary>
+    <div class="body">
+      <ul>
+        <li>Patientez : la première publication peut prendre plusieurs minutes.</li>
+        <li>Le fichier doit s'appeler <code>index.html</code>, tout en minuscules, à la racine.</li>
+        <li>Les noms de fichiers sont sensibles à la casse : <code>Image.PNG</code> n'est pas <code>image.png</code>.</li>
+        <li>Dans une page, utilisez des chemins relatifs (<code>image.png</code>) plutôt que <code>/image.png</code> : sur un site de projet, le slash initial pointe vers la racine du domaine, pas vers votre dépôt.</li>
+        <li>Dépôt privé avec offre gratuite : Pages n'est pas disponible, passez le dépôt en public.</li>
+      </ul>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="5"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 6 -->
+<section class="step" id="etape-6" data-step="6">
+  <h2><span class="n">6</span>Apparaître dans les moteurs de recherche</h2>
+  <p class="goal">Le référencement n'est jamais instantané ni garanti : comptez de quelques jours à quelques semaines.</p>
+  <ul class="essential">
+    <li>Soignez la page : un <code>&lt;title&gt;</code> clair, une <code>meta description</code>, des titres <code>h1</code>, <code>h2</code>.</li>
+    <li>Inscrivez le site dans <strong>Google Search Console</strong>, vérifiez-en la propriété, demandez l'indexation.</li>
+    <li>Faites de même dans <strong>Bing Webmaster Tools</strong> (import possible depuis Google).</li>
+  </ul>
+  <details>
+    <summary>Préparer la page (avant de s'inscrire)</summary>
+    <div class="body">
+      <p>Dans le <code>&lt;head&gt;</code> de votre <code>index.html</code> :</p>
+<pre><code>&lt;html lang="fr"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Titre précis de la page (moins de 60 caractères)&lt;/title&gt;
+  &lt;meta name="description" content="Résumé de la page en une ou deux phrases."&gt;
+&lt;/head&gt;</code></pre>
+      <ul>
+        <li>Un seul <code>h1</code> par page, qui dit de quoi parle la page.</li>
+        <li>Du vrai texte (pas seulement des images), un texte alternatif (<code>alt</code>) sur chaque image.</li>
+        <li>Des liens vers votre page depuis d'autres sites ou réseaux sociaux : cela aide les moteurs à la découvrir.</li>
+      </ul>
+    </div>
+  </details>
+  <details>
+    <summary>Google Search Console, pas à pas</summary>
+    <div class="body">
+      <ol>
+        <li>Ouvrez <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console</a> avec un compte Google.</li>
+        <li>Choisissez <strong>Préfixe de l'URL</strong> (le type « Domaine » n'est pas possible sur <code>github.io</code>, qui n'est pas à vous) et saisissez l'adresse complète de votre site, avec <code>https://</code> et la barre finale.</li>
+        <li>Vérification de propriété : choisissez <strong>Balise HTML</strong>. Google fournit une ligne <code>&lt;meta name="google-site-verification" …&gt;</code> à coller dans le <code>&lt;head&gt;</code> de votre <code>index.html</code> (étape 3), puis cliquez sur <strong>Valider</strong>.</li>
+        <li>Dans la barre du haut, collez l'adresse de votre page (<strong>Inspection de l'URL</strong>), puis <strong>Demander une indexation</strong>.</li>
+        <li>Facultatif : ajoutez un plan de site (<code>sitemap.xml</code>) dans le menu <strong>Sitemaps</strong>.</li>
+      </ol>
+      <h3>Exemple minimal de plan de site</h3>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://NOM.github.io/mon-premier-site/&lt;/loc&gt;
+  &lt;/url&gt;
+&lt;/urlset&gt;</code></pre>
+      <p>Enregistrez-le sous <code>sitemap.xml</code> à la racine du dépôt.</p>
+      <div class="note"><strong>Limite à connaître :</strong> pour un site de projet (<code>NOM.github.io/depot/</code>), le fichier <code>robots.txt</code> doit se trouver à la racine du domaine, que vous ne contrôlez pas. Il n'est pas indispensable pour être indexé.</div>
+    </div>
+  </details>
+  <details>
+    <summary>Bing et les autres moteurs</summary>
+    <div class="body">
+      <ul>
+        <li><a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> : ajoutez votre site, ou importez-le depuis Google Search Console.</li>
+        <li>Plusieurs moteurs alternatifs reprennent l'index de Bing : l'inscription Bing a donc un effet indirect.</li>
+      </ul>
+    </div>
+  </details>
+  <details>
+    <summary>Vérifier si la page est indexée</summary>
+    <div class="body">
+      <ul>
+        <li>Dans Google, tapez <code>site:NOM.github.io/mon-premier-site</code>. Aucun résultat signifie « pas encore indexée » ou « non indexée ».</li>
+        <li>Dans Search Console, le rapport <strong>Pages</strong> indique l'état et les raisons d'une éventuelle exclusion.</li>
+        <li>Une page indexée n'apparaît pas forcément en haut des résultats : le classement dépend de nombreux facteurs.</li>
+      </ul>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="6"> J'ai terminé cette étape</label>
+</section>
+
+<!-- ÉTAPE 7 -->
+<section class="step" id="etape-7" data-step="7">
+  <h2><span class="n">7</span>Toutes les infos utiles</h2>
+  <p class="goal">À lire une fois, pour éviter les mauvaises surprises.</p>
+  <ul class="essential">
+    <li>GitHub Pages est gratuit pour un dépôt public, mais il ne sert que des pages <strong>statiques</strong> (pas de base de données ni de code serveur).</li>
+    <li>Tout ce qui est dans un dépôt public est lisible par tous : jamais de mot de passe, de clé ni de donnée personnelle.</li>
+  </ul>
+
+  <details>
+    <summary>Coût, limites et usages permis</summary>
+    <div class="body">
+      <ul>
+        <li>Gratuit avec l'offre Free pour les dépôts publics. Les dépôts privés avec Pages demandent une offre payante.</li>
+        <li>Limites indicatives publiées par GitHub : site de 1 Go au plus, environ 100 Go de trafic par mois, environ 10 publications par heure. Vérifiez les valeurs actuelles dans la documentation officielle.</li>
+        <li>Pages n'est pas prévu pour héberger une boutique en ligne ou un service commercial : consultez les conditions d'utilisation.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Sécurité et vie privée</summary>
+    <div class="body">
+      <ul>
+        <li>Activez la double authentification sur votre compte.</li>
+        <li>Ne publiez jamais de mot de passe, de clé d'accès ou de données de patients, d'élèves ou de clients.</li>
+        <li>Même si une donnée est supprimée d'un fichier, elle reste dans l'historique des versions tant que le dépôt existe.</li>
+        <li>Votre nom d'utilisateur étant dans l'adresse, il est public.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Utiliser votre propre nom de domaine (facultatif)</summary>
+    <div class="body">
+      <ol>
+        <li>Achetez un nom de domaine chez un bureau d'enregistrement (payant, environ une dizaine d'euros par an en général).</li>
+        <li>Dans <strong>Settings</strong>, <strong>Pages</strong>, renseignez <strong>Custom domain</strong>.</li>
+        <li>Chez votre bureau d'enregistrement, ajoutez les enregistrements <abbr title="Domain Name System : annuaire qui relie un nom de domaine à un serveur">DNS</abbr> indiqués dans la documentation GitHub.</li>
+        <li>Patientez (de quelques minutes à 24 h), puis cochez <strong>Enforce HTTPS</strong>.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>Dépannage rapide</summary>
+    <div class="body">
+      <table>
+        <tr><th>Symptôme</th><th>Cause probable</th></tr>
+        <tr><td>Erreur 404</td><td>Publication pas terminée, <code>index.html</code> absent ou mal nommé, dépôt privé</td></tr>
+        <tr><td>Ancienne version affichée</td><td>Cache du navigateur : rechargez avec <kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>R</kbd> (<kbd>Cmd</kbd> + <kbd>Maj</kbd> + <kbd>R</kbd> sur Mac)</td></tr>
+        <tr><td>Images absentes</td><td>Mauvaise casse du nom ou chemin commençant par <code>/</code></td></tr>
+        <tr><td>Page absente de Google</td><td>Délai normal, ou page non indexée : voir le rapport <em>Pages</em> de Search Console</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary>Glossaire</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Dépôt (repository)</strong> : dossier de projet suivi par GitHub, avec son historique.</li>
+        <li><strong>Commit</strong> : enregistrement d'un ensemble de modifications, accompagné d'un message.</li>
+        <li><strong>Branche</strong> : version parallèle du projet. <code>main</code> est la principale.</li>
+        <li><strong>HTML</strong> (<em>HyperText Markup Language</em>) : langage qui décrit le contenu d'une page web.</li>
+        <li><strong>URL</strong> (<em>Uniform Resource Locator</em>) : adresse d'une page web.</li>
+        <li><strong>HTTPS</strong> : connexion chiffrée entre le visiteur et le site (le cadenas du navigateur).</li>
+        <li><strong>DNS</strong> : annuaire qui associe un nom de domaine à un serveur.</li>
+        <li><strong>Indexation</strong> : enregistrement d'une page dans la base d'un moteur de recherche.</li>
+        <li><strong>Page statique</strong> : page identique pour tous les visiteurs, sans traitement côté serveur.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Sources officielles (à consulter pour les détails à jour)</summary>
+    <div class="body">
+      <p>L'interface de GitHub évolue : les libellés exacts des boutons peuvent changer. La documentation GitHub est disponible en français via le sélecteur de langue.</p>
+      <ul>
+        <li><a href="https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github" target="_blank" rel="noopener">GitHub Docs : créer un compte</a></li>
+        <li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener">GitHub Docs : créer un site GitHub Pages</a></li>
+        <li><a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/deleting-a-repository" target="_blank" rel="noopener">GitHub Docs : supprimer un dépôt</a></li>
+        <li><a href="https://docs.github.com/pages" target="_blank" rel="noopener">GitHub Docs : accueil de GitHub Pages (limites, domaine personnalisé)</a></li>
+        <li><a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google : guide de démarrage du référencement</a></li>
+        <li><a href="https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap" target="_blank" rel="noopener">Google : créer un plan de site</a></li>
+        <li><a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console</a></li>
+        <li><a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a></li>
+      </ul>
+    </div>
+  </details>
+  <label class="done-check"><input type="checkbox" data-done="7"> J'ai terminé cette étape</label>
+</section>
+
+<footer>Page de test · guide débutant GitHub Pages · mise en page autonome, sans dépendance externe</footer>
+</div>
+
+<script>
+(function () {
+  // Test en direct : où la page est-elle affichée ?
+  var live = document.getElementById('live');
+  var text = document.getElementById('live-text');
+  var href = location.href;
+  if (/\.github\.io$/.test(location.hostname)) {
+    live.className = 'live ok';
+    text.innerHTML = 'Réussi : cette page est bien servie par GitHub Pages à l\'adresse <code></code>.';
+    text.querySelector('code').textContent = href;
+  } else if (location.protocol === 'file:') {
+    live.className = 'live local';
+    text.textContent = 'Page ouverte depuis votre ordinateur (fichier local). Déposez-la dans un dépôt GitHub et activez Pages (étape 5) pour la voir en ligne.';
+  } else {
+    live.className = 'live local';
+    text.innerHTML = 'Page affichée à l\'adresse <code></code> (hors github.io).';
+    text.querySelector('code').textContent = href;
+  }
+
+  // Progression mémorisée dans le navigateur (facultative)
+  var KEY = 'guide-github-pages-progress';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+
+  var boxes = document.querySelectorAll('input[data-done]');
+  var label = document.getElementById('progress-label');
+  var bar = document.getElementById('progress-bar');
+
+  function render() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      var id = b.getAttribute('data-done');
+      b.checked = !!state[id];
+      if (state[id]) n++;
+      var li = document.querySelector('#steps-nav li[data-step="' + id + '"]');
+      if (li) li.classList.toggle('done', !!state[id]);
+    });
+    label.textContent = n + ' / ' + boxes.length;
+    bar.style.width = (n / boxes.length * 100) + '%';
+  }
+
+  boxes.forEach(function (b) {
+    b.addEventListener('change', function () {
+      state[b.getAttribute('data-done')] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      render();
+    });
+  });
+  render();
+
+  // Ouvre automatiquement la section ciblée par un lien d'ancre
+  if (location.hash) {
+    var target = document.querySelector(location.hash);
+    if (target && target.tagName === 'DETAILS') target.open = true;
+  }
+})();
+</script>
+</body>
+</html>
